@@ -1,13 +1,26 @@
-export default function Categories() {
+export default function Categories({ activeCategory, setActiveCategory }) {
+  const cotegotyes = [
+    "Все",
+    "Мясные",
+    "Вегетарианская",
+    "Гриль",
+    "Десерты",
+    "Острые",
+    "Закрытые",
+  ];
+
   return (
-    <div class='categories'>
+    <div className='categories'>
       <ul>
-        <li class='active'>Все</li>
-        <li>Мясные</li>
-        <li>Вегетарианская</li>
-        <li>Гриль</li>
-        <li>Острые</li>
-        <li>Закрытые</li>
+        {cotegotyes.map((cotegory, index) => (
+          <li
+            key={cotegory}
+            onClick={() => setActiveCategory(index)}
+            className={activeCategory === index ? "active" : ""}
+          >
+            {cotegory}
+          </li>
+        ))}
       </ul>
     </div>
   );

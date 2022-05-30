@@ -1,7 +1,30 @@
-export default function Sort() {
+import { useState } from "react";
+export default function Sort({ selectedSort, setSelectedSort }) {
+  const [isVisible, setIstVisible] = useState(false);
+
+  const sortList = [
+    { name: "популярности", sortProp: "rating" },
+    { name: "цене", sortProp: "price" },
+    { name: "алфавиту", sortProp: "title" },
+  ];
+  const onClickSortItem = (index) => {
+    setSelectedSort(index);
+    setIstVisible(false);
+  };
+
+  const sorts = sortList.map((sort, index) => (
+    <li
+      key={index}
+      onClick={() => onClickSortItem(sort)}
+      className={selectedSort.sortProp === sort.sortProp ? "active" : ""}
+    >
+      {sort.name}
+    </li>
+  ));
+  console.log("sortList[selectedSort]", sortList, selectedSort);
   return (
-    <div class='sort'>
-      <div class='sort__label'>
+    <div className='sort'>
+      <div className='sort__label'>
         <svg
           width='10'
           height='6'
@@ -15,15 +38,16 @@ export default function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => setIstVisible(!isVisible)}>
+          {selectedSort.name}
+        </span>
       </div>
-      <div class='sort__popup'>
-        <ul>
-          <li class='active'>популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {isVisible && (
+        <div className='sort__popup'>
+          <ul>{sorts}</ul>
+        </div>
+      )}
+      {/*  */}
     </div>
   );
 }

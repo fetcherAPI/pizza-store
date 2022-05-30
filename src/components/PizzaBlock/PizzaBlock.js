@@ -1,26 +1,53 @@
-export default function PizzaBlock({ title, price }) {
+import { useState } from "react";
+
+export default function PizzaBlock({
+  id,
+  title,
+  price,
+  img,
+  sizesList,
+  typesList,
+}) {
+  const [pizzaCount, setPizzaCount] = useState(0);
+  const [activeSize, setActiveSize] = useState(0);
+  const [activeType, setActiveType] = useState(0);
+
+  const typesName = ["тонкое", "традиционное"];
+
+  const sizes = sizesList.map((size, index) => (
+    <li
+      key={index}
+      onClick={() => setActiveSize(index)}
+      className={activeSize === index ? "active" : ""}
+    >
+      {size} см.
+    </li>
+  ));
+
+  const types = typesList.map((index) => (
+    <li
+      key={index}
+      onClick={() => setActiveType(index)}
+      className={activeType === index ? "active" : ""}
+    >
+      {typesName[index]}
+    </li>
+  ));
+
   return (
-    <div class='pizza-block'>
-      <img
-        class='pizza-block__image'
-        src='https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg'
-        alt='Pizza'
-      />
-      <h4 class='pizza-block__title'>{title}</h4>
-      <div class='pizza-block__selector'>
-        <ul>
-          <li class='active'>тонкое</li>
-          <li>традиционное</li>
-        </ul>
-        <ul>
-          <li class='active'>26 см.</li>
-          <li>30 см.</li>
-          <li>40 см.</li>
-        </ul>
+    <div className='pizza-block'>
+      <img className='pizza-block__image' src={img} alt='Pizza' />
+      <h4 className='pizza-block__title'>{title}</h4>
+      <div className='pizza-block__selector'>
+        <ul>{types}</ul>
+        <ul>{sizes}</ul>
       </div>
-      <div class='pizza-block__bottom'>
-        <div class='pizza-block__price'>от {price} ₽</div>
-        <div class='button button--outline button--add'>
+      <div className='pizza-block__bottom'>
+        <div className='pizza-block__price'>от {price} ₽</div>
+        <button
+          onClick={() => setPizzaCount(pizzaCount + 1)}
+          className='button button--outline button--add'
+        >
           <svg
             width='12'
             height='12'
@@ -34,8 +61,8 @@ export default function PizzaBlock({ title, price }) {
             />
           </svg>
           <span>Добавить</span>
-          <i>2</i>
-        </div>
+          <i>{pizzaCount}</i>
+        </button>
       </div>
     </div>
   );
