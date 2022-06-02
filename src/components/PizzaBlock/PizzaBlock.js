@@ -16,7 +16,7 @@ export default function PizzaBlock({
 
   const sizes = sizesList.map((size, index) => (
     <li
-      key={index}
+      key={id + index}
       onClick={() => setActiveSize(index)}
       className={activeSize === index ? "active" : ""}
     >
@@ -26,7 +26,7 @@ export default function PizzaBlock({
 
   const types = typesList.map((index) => (
     <li
-      key={index}
+      key={index + id}
       onClick={() => setActiveType(index)}
       className={activeType === index ? "active" : ""}
     >

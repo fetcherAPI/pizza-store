@@ -21,7 +21,7 @@ export default function Sort({ selectedSort, setSelectedSort }) {
       {sort.name}
     </li>
   ));
-  console.log("sortList[selectedSort]", sortList, selectedSort);
+
   return (
     <div className='sort'>
       <div className='sort__label'>

@@ -2,17 +2,23 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Sort from "../components/Sort";
 import Categories from "../components/Categories";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { SearchContext } from "../App";
 
 function Home() {
   const [pizzas, setPizzas] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
+
   const [activeCategory, setActiveCategory] = useState(0);
+
   const [selectedSort, setSelectedSort] = useState({
     name: "популярности",
     sortProp: "rating",
   });
-  console.log(selectedSort);
+
+  const { searchValue } = useContext(SearchContext);
+
   useEffect(() => {
     setIsLoading(true);
     fetch(
@@ -26,6 +32,25 @@ function Home() {
         setIsLoading(false);
       });
   }, [activeCategory, selectedSort]);
+
+  const items = pizzas
+    .filter((pizza) => {
+      if (pizza.title.toLowerCase().includes(searchValue.toLowerCase())) {
+        return true;
+      }
+      return false;
+    })
+    .map((pizza) => (
+      <PizzaBlock
+        key={pizza.id}
+        id={pizza.id}
+        title={pizza.title}
+        price={pizza.price}
+        img={pizza.imageUrl}
+        sizesList={pizza.sizes}
+        typesList={pizza.types}
+      />
+    ));
 
   return (
     <div className='container'>
@@ -43,17 +68,7 @@ function Home() {
       <div className='content__items'>
         {isLoading
           ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-          : pizzas.map((pizza) => (
-              <PizzaBlock
-                key={pizza.id}
-                id={pizza.id}
-                title={pizza.title}
-                price={pizza.price}
-                img={pizza.imageUrl}
-                sizesList={pizza.sizes}
-                typesList={pizza.types}
-              />
-            ))}
+          : items}
       </div>
     </div>
   );
