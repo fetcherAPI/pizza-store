@@ -2,15 +2,21 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Sort from "../components/Sort";
 import Categories from "../components/Categories";
+import { setCategoryID } from "../redux/slices/filterSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useContext } from "react";
 import { SearchContext } from "../App";
 
 function Home() {
-  const [pizzas, setPizzas] = useState([]);
+  const dispath = useDispatch();
+  const categoryID = useSelector((state) => state.filterSlice.categoryID);
 
+  const [pizzas, setPizzas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [activeCategory, setActiveCategory] = useState(0);
+  const setActiveCategory = (id) => {
+    dispath(setCategoryID(id));
+  };
 
   const [selectedSort, setSelectedSort] = useState({
     name: "популярности",
@@ -23,7 +29,7 @@ function Home() {
     setIsLoading(true);
     fetch(
       `https://629386a6089f87a57ac1c33e.mockapi.io/items?${
-        activeCategory ? `category=${activeCategory}` : ""
+        categoryID ? `category=${categoryID}` : ""
       }&sortBy=${selectedSort.sortProp}&order=desc`
     )
       .then((res) => res.json())
@@ -31,7 +37,7 @@ function Home() {
         setPizzas(body);
         setIsLoading(false);
       });
-  }, [activeCategory, selectedSort]);
+  }, [categoryID, selectedSort]);
 
   const items = pizzas
     .filter((pizza) => {
@@ -56,8 +62,8 @@ function Home() {
     <div className='container'>
       <div className='content__top'>
         <Categories
-          activeCategory={activeCategory}
-          setActiveCategory={(id) => setActiveCategory(id)}
+          activeCategory={categoryID}
+          setActiveCategory={setActiveCategory}
         />
         <Sort
           selectedSort={selectedSort}
